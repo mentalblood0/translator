@@ -18,4 +18,4 @@ if args.format == "markdown":
 elif args.format == "html":
     print(translator.html)
 elif args.format == "json":
-    print(json.dumps(translator.translated))
+    print(translator.json)
