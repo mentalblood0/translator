@@ -30,16 +30,12 @@ class Pdf:
                     Y[y] = 0
                 Y[y] += 1
 
-        return [*sorted(y for y, _ in sorted(Y.items(), key=lambda i: -i[1]))]
+        return [*sorted([y for y, _ in sorted(Y.items(), key=lambda i: -i[1])][:3])]
 
     @functools.cached_property
     def repeated_text_blocks(self):
         repeated = self.repeated(lambda p: p.get_text_blocks(), lambda b: b[1])
-        return repeated[0], repeated[-1], repeated[-2]
-
-    @functools.cached_property
-    def repeated_drawings(self):
-        return self.repeated(lambda p: p.get_drawings(), lambda d: (d["items"][0][1].y, d["items"][0][-1].y))
+        return repeated[0], repeated[-1]
 
     @classmethod
     def footnotes_line_y(cls, p: fitz.Page) -> typing.Union[float, None]:
@@ -51,7 +47,7 @@ class Pdf:
         assert footnotes_line[1].y == footnotes_line[2].y, "first drawing on page is not horizontal line"
         return footnotes_line[1].y
 
-    @functools.cached_property
+    @property
     def tokens(self):
         for p in self.parsed:
             f = self.footnotes_line_y(p)
@@ -59,7 +55,7 @@ class Pdf:
                 y = b[1]
                 if y in self.repeated_text_blocks:
                     continue
-                if f is not None and y > f:
+                if (f is not None) and (y > f):
                     yield "footnote", b[-3]
                 else:
                     yield "text", b[-3]
