@@ -52,7 +52,7 @@ class Translator:
             for r in self._trans(buffer):
                 yield r
 
-    @property
+    @functools.cached_property
     def sentences(self):
         return [*self.split(self.filter(self.source))]
 

@@ -1,8 +1,5 @@
 import dataclasses
 import functools
-import pathlib
-import re
-import subprocess
 import typing
 
 import fitz
