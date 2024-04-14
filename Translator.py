@@ -60,14 +60,21 @@ class Translator:
     def translated(self):
         return [*zip(self.sentences, self.trans(self.sentences))]
 
+    @functools.cached_property
+    def headers(self):
+        t = [*self.trans(["Source", "The translate"])]
+        return t[0], t[1]
+
     @property
     def markdown(self):
-        return "|Оригинал|Перевод|\n|---|---|\n" + "\n".join(f"|{o}|{t}|" for o, t in self.translated)
+        return f"|{self.headers[0]}|{self.headers[1]}|\n|---|---|\n" + "\n".join(
+            f"|{o}|{t}|" for o, t in self.translated
+        )
 
     @property
     def html(self):
         return "".join(
-            ["<table><thead><tr><th>Оригинал</th><th>Перевод</th></tr></thead><tbody>"]
+            [f"<table><thead><tr><th>{self.headers[0]}</th><th>{self.headers[1]}</th></tr></thead><tbody>"]
             + [f"<tr><td>{o}</td><td>{t}</td></tr>" for o, t in self.translated]
             + ["</tbody></table>"]
         )
