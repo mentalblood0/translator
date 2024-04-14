@@ -49,14 +49,21 @@ class Pdf:
     def tokens(self):
         for p in self.parsed:
             f = self.footnotes_line_y(p)
+            end = False
             for b in p.get_text_blocks():
                 y = b[1]
+                text = b[-3]
                 if y in self.repeated_text_blocks:
                     continue
                 if (f is not None) and (y > f):
-                    yield "footnote", b[-3]
-                else:
-                    yield "text", b[-3]
+                    yield "footnote", text
+                elif not end:
+                    if text.strip() == "References":
+                        end = True
+                        continue
+                    yield "text", text
+            if end:
+                break
 
     def _text(self, token_type: str):
         return (t[1] for t in self.tokens if t[0] == token_type)
