@@ -11,7 +11,7 @@ parser.add_argument(
     "-l",
     "--language",
     required=True,
-    choices=subprocess.run(args=["trans", "-list-codes"], capture_output=True).stdout.decode().split("\n"),
+    choices=subprocess.run(args=["trans", "-list-codes"], capture_output=True).stdout.decode().split("\n")[:-1],
 )
 args = parser.parse_args()
 
