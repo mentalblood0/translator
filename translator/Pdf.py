@@ -1,5 +1,6 @@
 import dataclasses
 import functools
+import operator
 import typing
 
 import fitz
@@ -31,7 +32,7 @@ class Pdf:
 
     @functools.cached_property
     def repeated_text_blocks(self):
-        repeated = self.repeated(lambda p: p.get_text_blocks(), lambda b: b[1])
+        repeated = self.repeated(lambda p: p.get_text_blocks(), operator.itemgetter(1))
         return repeated[0], repeated[-1]
 
     @classmethod
