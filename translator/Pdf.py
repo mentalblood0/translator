@@ -57,8 +57,8 @@ class Pdf:
                 else:
                     yield "text", b[-3]
 
-    def _text(self, type: str):
-        return (t[1] for t in self.tokens if t[0] == type)
+    def _text(self, token_type: str):
+        return (t[1] for t in self.tokens if t[0] == token_type)
 
     @property
     def text(self):

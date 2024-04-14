@@ -5,7 +5,7 @@ import setuptools
 
 if __name__ == "__main__":
     if os.system("trans --version"):
-        print(
+        raise LookupError(
             "translator need translate-shell utility in order to work, "
             "you can install it from here: https://github.com/soimort/translate-shell"
         )

@@ -25,15 +25,14 @@ class Translator:
         )
 
     def _trans(self, sentences: typing.Iterable[str]):
-        for r in (
+        yield from (
             subprocess.run(
                 args=("trans", f":{self.target_language}", "-e", "google", "--brief", "\n".join(sentences)),
                 capture_output=True,
             )
             .stdout.decode()[:-1]
             .split("\n")
-        ):
-            yield r
+        )
 
     def trans(self, sentences: typing.Iterable[str]):
         buffer = []
@@ -43,14 +42,12 @@ class Translator:
             buffer.append(s)
             size += len(s) + 1
             if size + len(s) >= 4096:
-                for r in self._trans(buffer):
-                    yield r
+                yield from self._trans(buffer)
                 buffer.clear()
                 size = 0
 
         if buffer:
-            for r in self._trans(buffer):
-                yield r
+            yield from self._trans(buffer)
 
     @functools.cached_property
     def sentences(self):
