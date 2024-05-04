@@ -1,6 +1,7 @@
 import dataclasses
 import functools
 import operator
+import sys
 import typing
 
 import fitz
@@ -38,12 +39,19 @@ class Pdf:
     @classmethod
     def footnotes_line_y(cls, p: fitz.Page) -> typing.Union[float, None]:
         drawings = p.get_drawings()
+        sys.stderr.write(str(drawings) + "\n\n")
         if not drawings:
             return None
-        footnotes_line = next(iter(p.get_drawings()))["items"][0]
-        assert footnotes_line[0] == "l", "first drawing on page is not line"
-        assert footnotes_line[1].y == footnotes_line[2].y, "first drawing on page is not horizontal line"
-        return footnotes_line[1].y
+        result = None
+        for d in p.get_drawings():
+            l = d["items"][0]
+            if (l[0] != "l") or (l[1].y == l[2].y):
+                continue
+            y = l[1].y
+            if (result is not None) and (y <= result):
+                continue
+            result = y
+        return result
 
     @property
     def tokens(self):

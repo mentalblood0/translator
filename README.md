@@ -14,9 +14,3 @@
 ```bash
 python3 -m pip install --upgrade git+https://github.com/mentalblood/translator
 ```
-
-## Usage
-
-```bash
-cat some/paper.pdf | python3 -m translator -f html -l ru > paper_translated.html
-```

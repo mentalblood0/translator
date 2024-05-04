@@ -1,5 +1,6 @@
 import dataclasses
 import functools
+import itertools
 import json
 import re
 import subprocess
@@ -61,6 +62,10 @@ class Translator:
     def headers(self):
         t = [*self.trans(["Source", "The translate"])]
         return t[0], t[1]
+
+    @functools.cached_property
+    def text(self):
+        return "\n\n".join("\n".join([o, t]) for o, t in self.translated)
 
     @property
     def markdown(self):
