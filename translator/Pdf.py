@@ -44,10 +44,10 @@ class Pdf:
             return None
         result = None
         for d in p.get_drawings():
-            l = d["items"][0]
-            if (l[0] != "l") or (l[1].y == l[2].y):
+            lines = d["items"][0]
+            if (lines[0] != "l") or (lines[1].y == lines[2].y):
                 continue
-            y = l[1].y
+            y = lines[1].y
             if (result is not None) and (y <= result):
                 continue
             result = y

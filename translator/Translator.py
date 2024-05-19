@@ -1,6 +1,5 @@
 import dataclasses
 import functools
-import itertools
 import json
 import re
 import subprocess
