@@ -55,7 +55,7 @@ class Translator:
 
     @functools.cached_property
     def translated(self):
-        return [*zip(self.sentences, self.trans(self.sentences))]
+        return zip(self.sentences, self.trans(self.sentences))
 
     @functools.cached_property
     def headers(self):
