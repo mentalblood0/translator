@@ -17,22 +17,24 @@ class Translator:
 
     @classmethod
     def split(cls, s: str):
-        return (
+        for r in (
             s[m.start() : m.end()]
             for m in re.finditer(
                 r"(?:[^.?!]|(?:(?:Q|W|E|R|T|Y|U|I|O|P|A|S|D|F|G|H|J|K|L|Z|X|C|V|B|N|M)\.))*[^ .?!]{2,}(?:\.|!|\?)", s
             )
-        )
+        ):
+            yield r.strip()
 
     def _trans(self, sentences: typing.Iterable[str]):
-        yield from (
+        for result in (
             subprocess.run(
                 args=("trans", f":{self.target_language}", "-e", "google", "--brief", "\n".join(sentences)),
                 capture_output=True,
             )
             .stdout.decode()[:-1]
             .split("\n")
-        )
+        ):
+            yield result.strip()
 
     def trans(self, sentences: typing.Iterable[str]):
         buffer = []
