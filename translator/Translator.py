@@ -17,8 +17,8 @@ class Translator:
 
     @classmethod
     def split(cls, s: str):
-        for r in (s[m.start():m.end()]
-                  for m in re.finditer(r"(?:[^.?!]|(?:[A-Z]\.)|(?:e\.g\.)|(?:i\.e\.))*[^ .?!]{2,} *(?:\.|!|\?|$)", s)):
+        for r in (s[m.start():m.end()] for m in re.finditer(
+                r"(?:[^.?!]|(?:[A-Z]\.)|(?:e\.g\.)|(?:i\.e\.)|(?:\[ *\. *\. *\. *\]))*[^ .?!]{2,} *(?:\.|!|\?|$)", s)):
             yield r.strip()
 
     def _trans(self, sentences: typing.Iterable[str]):
