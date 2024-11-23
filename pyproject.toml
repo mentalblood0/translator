@@ -1,3 +1,5 @@
-[tool.black]
-line-length = 120
-skip-magic-trailing-comma = true
+[tool.yapf]
+column_limit = 120
+
+[tool.yapfignore]
+ignore_patterns = ["build/**/*.py"]

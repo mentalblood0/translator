@@ -17,23 +17,15 @@ class Translator:
 
     @classmethod
     def split(cls, s: str):
-        for r in (
-            s[m.start() : m.end()]
-            for m in re.finditer(
-                r"(?:[^.?!]|(?:(?:Q|W|E|R|T|Y|U|I|O|P|A|S|D|F|G|H|J|K|L|Z|X|C|V|B|N|M)\.))*[^ .?!]{2,}(?:\.|!|\?)", s
-            )
-        ):
+        for r in (s[m.start():m.end()]
+                  for m in re.finditer(r"(?:[^.?!]|(?:[A-Z]\.)|(?:e\.g\.)|(?:i\.e\.))*[^ .?!]{2,} *(?:\.|!|\?)", s)):
             yield r.strip()
 
     def _trans(self, sentences: typing.Iterable[str]):
-        for result in (
-            subprocess.run(
+        for result in (subprocess.run(
                 args=("trans", f":{self.target_language}", "-e", "google", "--brief", "\n".join(sentences)),
                 capture_output=True,
-            )
-            .stdout.decode()[:-1]
-            .split("\n")
-        ):
+        ).stdout.decode()[:-1].split("\n")):
             yield result.strip()
 
     def trans(self, sentences: typing.Iterable[str]):
@@ -70,17 +62,13 @@ class Translator:
 
     @property
     def markdown(self):
-        return f"|{self.headers[0]}|{self.headers[1]}|\n|---|---|\n" + "\n".join(
-            f"|{o}|{t}|" for o, t in self.translated
-        )
+        return f"|{self.headers[0]}|{self.headers[1]}|\n|---|---|\n" + "\n".join(f"|{o}|{t}|"
+                                                                                 for o, t in self.translated)
 
     @property
     def html(self):
-        return "".join(
-            [f"<table><thead><tr><th>{self.headers[0]}</th><th>{self.headers[1]}</th></tr></thead><tbody>"]
-            + [f"<tr><td>{o}</td><td>{t}</td></tr>" for o, t in self.translated]
-            + ["</tbody></table>"]
-        )
+        return "".join([f"<table><thead><tr><th>{self.headers[0]}</th><th>{self.headers[1]}</th></tr></thead><tbody>"] +
+                       [f"<tr><td>{o}</td><td>{t}</td></tr>" for o, t in self.translated] + ["</tbody></table>"])
 
     @property
     def json(self):

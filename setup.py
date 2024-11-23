@@ -5,10 +5,8 @@ import setuptools
 
 if __name__ == "__main__":
     if os.system("trans --version"):
-        raise LookupError(
-            "translator need translate-shell utility in order to work, "
-            "you can install it from here: https://github.com/soimort/translate-shell"
-        )
+        raise LookupError("translator need translate-shell utility in order to work, "
+                          "you can install it from here: https://github.com/soimort/translate-shell")
     setuptools.setup(
         name="translator",
         version="0.1.0",
